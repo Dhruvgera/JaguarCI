@@ -52,6 +52,10 @@ export DEFCONFIG="santoni_defconfig";
 export ZIP_DIR="${KERNELDIR}/files/";
 export IMAGE="${OUTDIR}/arch/${ARCH}/boot/Image.gz-dtb";
 
+$MAKE_STATEMENT mrproper;
+$MAKE_STATEMENT clean;
+rm -rf $IMAGE
+
 if [[ -z "${JOBS}" ]]; then
     export JOBS="$(nproc --all)";
 #    export JOBS=64;
@@ -94,7 +98,7 @@ if [[ "$@" =~ "clean" ]]; then
 fi
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAAD-AUAAqt3WAv7xJC12JKSwgI"  -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel (MIUI) started ツ" -d chat_id=$CHAT_ID
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel (MIUI-Based) started ツ" -d chat_id=$CHAT_ID
 
 ${MAKE} $DEFCONFIG;
 START=$(date +"%s");
@@ -107,9 +111,9 @@ echo -e "Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.";
 
 
 if [[ ! -f "${IMAGE}" ]]; then
-    echo -e "Build failed :P";
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel stopped unexpectedly ;_;" -d chat_id=$CHAT_ID
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAADqwIAAp6cUgruBouCZGe0NQI"  -d chat_id=$CHAT_ID
+    echo -e "Build failed 🙁";
+    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel stopped unexpectedly 😓" -d chat_id=$CHAT_ID
+    #curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAADqwIAAp6cUgruBouCZGe0NQI"  -d chat_id=$CHAT_ID
     success=false;
     exit 1;
 else
@@ -118,6 +122,23 @@ else
 fi
 
 echo -e "Copying kernel image";
+#making modules for MIUI support
+rm -r modules
+mkdir -p modules
+
+find . -name '*.ko' -exec cp {} $MODULES_DIR/ \;
+chmod 755 $MODULES_DIR/*
+
+"$CROSS_COMPILE"strip --strip-unneeded $MODULES_DIR/* 2>/dev/null
+"$CROSS_COMPILE"strip --strip-debug $MODULES_DIR/* 2>/dev/null
+
+mkdir -p $KERNEL_DIR/AnyKernel2/modules/system/lib/modules
+rm -r $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/*.ko
+rm -r $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/pronto
+cp -f $MODULES_DIR/*.ko $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/
+mkdir -p $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/pronto
+mv -f $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/wlan.ko $KERNEL_DIR/AnyKernel2/modules/system/lib/modules/pronto/pronto_wlan.ko
+
 cp -v "${IMAGE}" "${ANYKERNEL}/";
 cd -;
 cd ${ANYKERNEL};
@@ -132,10 +153,10 @@ if [[ ${success} == true ]]; then
     echo -e "Uploading ${ZIPNAME} to https://transfer.sh/";
     transfer "${FINAL_ZIP}";
 source common
-message="CI build of Jaguar Kernel completed with the latest commit."
+message="Jaguar Kernel - MIUI Based completed with the latest commit."
 time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001304675095"
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001263315920"
 curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
 
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID

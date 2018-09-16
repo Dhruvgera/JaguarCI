@@ -2,11 +2,34 @@
 
 # Template from https://github.com/bitrvmpd/msm-3.18/blob/rel/msm-3.18-oreo/build.sh
 # Thanks to Eduardo Noyer (https://github.com/bitrvmpd)
-# Thanks to Dencel K Babu (https://github.com/dencel007)
 
 clear
 echo "#########################################"
-echo "##### NTO
+echo "##### PHANTOM Kernel - Build Script #####"
+echo "#########################################"
+
+# Make statement declaration
+# ==========================
+# If compilation uses menuconfig, make operation will use .config 
+# instead of santoni_defconfig directly.
+MAKE_STATEMENT=make
+
+# ENV configuration
+# =================
+export PHANTOM_WORKING_DIR=$(dirname "$(pwd)")
+
+export KBUILD_BUILD_USER="TeamQuantum"
+export KBUILD_BUILD_HOST="QuantumBubble"
+export DEVICE="Santoni";
+
+export ZIP_DIR="${KERNEL_DIR}/AnyKernel2"
+export ZIP_NAME="${KERNEL_NAME}-${DEVICE}-$(date +%Y%m%d-%H%M).zip";
+export FINAL_ZIP="${ZIP_DIR}/${ZIP_NAME}"
+export MODULES_DIR="${KERNEL_DIR}/modules"
+
+export IMAGE="${KERNEL_DIR}/arch/arm64/boot/Image.gz-dtb";
+
+
 $MAKE_STATEMENT mrproper;
 $MAKE_STATEMENT clean;
 rm -rf $IMAGE
@@ -23,15 +46,15 @@ then
   # run this script with -clear-ccache
   if [[ "$*" == *"-clear-ccache"* ]]
   then
-    echo -e "\n\033[0;31m> Cleaning $Jaguar_WORKING_DIR/.ccache contents\033[0;0m" 
-    rm -rf "$Jaguar_WORKING_DIR/.ccache"
+    echo -e "\n\033[0;31m> Cleaning $PHANTOM_WORKING_DIR/.ccache contents\033[0;0m" 
+    rm -rf "$PHANTOM_WORKING_DIR/.ccache"
   fi
   # If you want to build *without* using ccache
   # run this script with -no-ccache flag
   if [[ "$*" != *"-no-ccache"* ]] 
   then
     export USE_CCACHE=1
-    export CCACHE_DIR="$Jaguar_WORKING_DIR/.ccache"
+    export CCACHE_DIR="$PHANTOM_WORKING_DIR/.ccache"
     export CCACHE_MAX_SIZE=6G
     echo -e "\n> $(ccache -M $CCACHE_MAX_SIZE)"
     echo -e "\n\033[0;32m> Using ccache, to disable it run this script with -no-ccache\033[0;0m\n"
@@ -46,7 +69,7 @@ fi
 # ==================================
 # point CROSS_COMPILE to the folder of the desired toolchain
 # don't forget to specify the prefix. Mine is: aarch64-linux-android-
-CROSS_COMPILE=$Jaguar_WORKING_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+CROSS_COMPILE=$PHANTOM_WORKING_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 # Are we using ccache?
 if [ -n "$USE_CCACHE" ] 
@@ -65,13 +88,13 @@ start=$SECONDS
 
 # Want custom kernel flags?
 # =========================
-# KBUILD_Jaguar_CFLAGS: Here you can set custom compilation 
+# KBUILD_PHANTOM_CFLAGS: Here you can set custom compilation 
 # flags to turn off unwanted warnings, or even set a 
 # different optimization level. 
 # To see how it works, check the Makefile ... file, 
 # line 625 to 628, located in the root dir of this kernel.
-KBUILD_Jaguar_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2" 
-KBUILD_Jaguar_CFLAGS=$KBUILD_Jaguar_CFLAGS ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE $MAKE_STATEMENT -j8
+KBUILD_PHANTOM_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2" 
+KBUILD_PHANTOM_CFLAGS=$KBUILD_PHANTOM_CFLAGS ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE $MAKE_STATEMENT -j8
 
 if [[ ! -f "${IMAGE}" ]]; then
     echo -e "\n\033[0;31m> Image.gz-dtb not FOUND. Build failed \033[0;0m\n";
@@ -84,8 +107,8 @@ else
 fi
 
 # Get current kernel version
-Jaguar_VERSION=$(head -n3 Makefile | sed -E 's/.*(^\w+\s[=]\s)//g' | xargs | sed -E 's/(\s)/./g')
-echo -e "\n\n\033[0;34m> Packing Jaguar Kernel v$Jaguar_VERSION $ZIP_NAME\n\033[0;0m\n" 
+PHANTOM_VERSION=$(head -n3 Makefile | sed -E 's/.*(^\w+\s[=]\s)//g' | xargs | sed -E 's/(\s)/./g')
+echo -e "\n\n\033[0;34m> Packing PHANTOM Kernel v$PHANTOM_VERSION $ZIP_NAME\n\033[0;0m\n" 
 
 end=$SECONDS
 duration=$(( end - start ))
