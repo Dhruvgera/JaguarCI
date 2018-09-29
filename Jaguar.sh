@@ -94,7 +94,7 @@ if [[ "$@" =~ "clean" ]]; then
 fi
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAAD-AUAAqt3WAv7xJC12JKSwgI"  -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel (Non-Treble) started ツ" -d chat_id=$CHAT_ID
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel (Treble) started ツ" -d chat_id=$CHAT_ID
 
 ${MAKE} $DEFCONFIG;
 START=$(date +"%s");
