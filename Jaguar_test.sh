@@ -143,9 +143,11 @@ curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADFQADIIRIEhVlVOIt6EkuAgc"  -d chat_id=$CHAT_ID
 # curl -F document=@$url caption="Latest Build." https://api.telegram.org/bot$BOT_API_KEY/sendDocument -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=":hammer: Make-Type  : ${MAKE_TYPE}
-:ghost: Build-Time : $time
-:hammer: Zip-Name   : $ZIPNAME" -d chat_id=$CHAT_ID
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
+🛠️ Make-Type  : ${M	AKE_TYPE}
+⌚ Build-Time : $time
+🗒️ Zip-Name   : $ZIPNAME
+" -d chat_id=$CHAT_ID
 
 
 
