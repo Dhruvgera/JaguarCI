@@ -5,7 +5,7 @@
 
 clear
 echo "#########################################"
-echo "##### PHANTOM Kernel - Build Script #####"
+echo "##### JAGUAR Kernel - Build Script #####"
 echo "#########################################"
 
 # Make statement declaration
@@ -15,6 +15,7 @@ echo "#########################################"
 MAKE_STATEMENT=make
 
 # ENV configuration
+export JAGUAR_WORKING_DIR=$(dirname "$(pwd)")
 export KBUILD_BUILD_USER="Quantummech2000"
 export KBUILD_BUILD_HOST="TeamQuantum"
 export DEVICE="Santoni";
@@ -43,15 +44,15 @@ then
   # run this script with -clear-ccache
   if [[ "$*" == *"-clear-ccache"* ]]
   then
-    echo -e "\n\033[0;31m> Cleaning $PHANTOM_WORKING_DIR/.ccache contents\033[0;0m" 
-    rm -rf "$PHANTOM_WORKING_DIR/.ccache"
+    echo -e "\n\033[0;31m> Cleaning $JAGUAR_WORKING_DIR/.ccache contents\033[0;0m" 
+    rm -rf "$JAGUAR_WORKING_DIR/.ccache"
   fi
   # If you want to build *without* using ccache
   # run this script with -no-ccache flag
   if [[ "$*" != *"-no-ccache"* ]] 
   then
     export USE_CCACHE=1
-    export CCACHE_DIR="$PHANTOM_WORKING_DIR/.ccache"
+    export CCACHE_DIR="$JAGUAR_WORKING_DIR/.ccache"
     export CCACHE_MAX_SIZE=6G
     echo -e "\n> $(ccache -M $CCACHE_MAX_SIZE)"
     echo -e "\n\033[0;32m> Using ccache, to disable it run this script with -no-ccache\033[0;0m\n"
@@ -66,7 +67,7 @@ fi
 # ==================================
 # point CROSS_COMPILE to the folder of the desired toolchain
 # don't forget to specify the prefix. Mine is: aarch64-linux-android-
-CROSS_COMPILE=$PHANTOM_WORKING_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+CROSS_COMPILE=$JAGUAR_WORKING_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 # Are we using ccache?
 if [ -n "$USE_CCACHE" ] 
@@ -85,13 +86,13 @@ start=$SECONDS
 
 # Want custom kernel flags?
 # =========================
-# KBUILD_PHANTOM_CFLAGS: Here you can set custom compilation 
+# KBUILD_JAGUAR_CFLAGS: Here you can set custom compilation 
 # flags to turn off unwanted warnings, or even set a 
 # different optimization level. 
 # To see how it works, check the Makefile ... file, 
 # line 625 to 628, located in the root dir of this kernel.
-KBUILD_PHANTOM_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2" 
-KBUILD_PHANTOM_CFLAGS=$KBUILD_PHANTOM_CFLAGS ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE $MAKE_STATEMENT -j8
+KBUILD_JAGUAR_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -mtune=cortex-a53 -march=armv8-a+crc+simd+crypto -mcpu=cortex-a53 -O2" 
+KBUILD_JAGUAR_CFLAGS=$KBUILD_JAGUAR_CFLAGS ARCH=arm64 SUBARCH=arm64 CROSS_COMPILE=$CROSS_COMPILE $MAKE_STATEMENT -j8
 
 if [[ ! -f "${IMAGE}" ]]; then
     echo -e "\n\033[0;31m> Image.gz-dtb not FOUND. Build failed \033[0;0m\n";
@@ -104,8 +105,8 @@ else
 fi
 
 # Get current kernel version
-PHANTOM_VERSION=$(head -n3 Makefile | sed -E 's/.*(^\w+\s[=]\s)//g' | xargs | sed -E 's/(\s)/./g')
-echo -e "\n\n\033[0;34m> Packing PHANTOM Kernel v$PHANTOM_VERSION $ZIP_NAME\n\033[0;0m\n" 
+JAGUAR_VERSION=$(head -n3 Makefile | sed -E 's/.*(^\w+\s[=]\s)//g' | xargs | sed -E 's/(\s)/./g')
+echo -e "\n\n\033[0;34m> Packing JAGUAR Kernel v$JAGUAR_VERSION $ZIP_NAME\n\033[0;0m\n" 
 
 end=$SECONDS
 duration=$(( end - start ))
