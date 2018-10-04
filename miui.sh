@@ -24,6 +24,7 @@ export ZIP_DIR="${KERNEL_DIR}/AnyKernel2"
 export ZIP_NAME="MIUI-${KERNEL_NAME}-${DEVICE}-$(date +%Y%m%d-%H%M).zip";
 export FINAL_ZIP="${ZIP_DIR}/${ZIP_NAME}"
 export MODULES_DIR="${KERNEL_DIR}/modules"
+export TOOLCHAIN="${HOME}/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/";
 
 export IMAGE="${KERNEL_DIR}/arch/arm64/boot/Image.gz-dtb";
 
@@ -67,7 +68,8 @@ fi
 # ==================================
 # point CROSS_COMPILE to the folder of the desired toolchain
 # don't forget to specify the prefix. Mine is: aarch64-linux-android-
-CROSS_COMPILE=$JAGUAR_WORKING_DIR/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+CROSS_COMPILE="${HOME}/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/";
+
 
 # Are we using ccache?
 if [ -n "$USE_CCACHE" ] 
