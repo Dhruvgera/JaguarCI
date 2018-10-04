@@ -33,7 +33,7 @@ fi
 
 export DEVICE=$1;
 
-export MAKE_TYPE="Treble"
+export MAKE_TYPE="MIUI"
 if [[ -z ${DEVICE} ]]; then
     export DEVICE="Santoni";
 fi
@@ -96,7 +96,7 @@ if [[ "$@" =~ "clean" ]]; then
 fi
 
 #curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAAD-AUAAqt3WAv7xJC12JKSwgI"  -d chat_id="-1001177930262"
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="Release build for $KERNELNAME Kernel (Release Version) Has Been initiated by CI" -d chat_id="-1001177930262"
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="Release build for $KERNELNAME Kernel (MIUI Release Version) Has Been initiated by CI" -d chat_id="-1001177930262"
 
 ${MAKE} $DEFCONFIG;
 START=$(date +"%s");
