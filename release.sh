@@ -66,7 +66,7 @@ export TCVERSION1="$(${CROSS_COMPILE}gcc --version | head -1 |\
 awk -F '(' '{print $2}' | awk '{print tolower($1)}')"
 export TCVERSION2="$(${CROSS_COMPILE}gcc --version | head -1 |\
 awk -F ')' '{print $2}' | awk '{print tolower($1)}')"
-export ZIPNAME="${KERNELNAME}-${DEVICE}-${MAKE_TYPE}-$(date +%Y%m%d-%H%M).zip"
+export ZIPNAME="${KERNELNAME}-${MAKE_TYPE}-RELEASE-BUILD-$(date +%Y%m%d-%H%M).zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
 
 [ ! -d "${ZIP_DIR}" ] && mkdir -pv ${ZIP_DIR}
@@ -95,8 +95,8 @@ if [[ "$@" =~ "clean" ]]; then
     ${MAKE} clean
 fi
 
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAAD-AUAAqt3WAv7xJC12JKSwgI"  -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="Automated build for $KERNELNAME Kernel (Test Version) Has Been initiated" -d chat_id=$CHAT_ID
+#curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAAD-AUAAqt3WAv7xJC12JKSwgI"  -d chat_id="-1001177930262"
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="Release build for $KERNELNAME Kernel (Release Version) Has Been initiated by CI" -d chat_id="-1001177930262"
 
 ${MAKE} $DEFCONFIG;
 START=$(date +"%s");
@@ -110,8 +110,8 @@ echo -e "Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.";
 
 if [[ ! -f "${IMAGE}" ]]; then
     echo -e "Build failed :P";
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel stopped unexpectedly ;_;" -d chat_id=$CHAT_ID
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAADqwIAAp6cUgruBouCZGe0NQI"  -d chat_id=$CHAT_ID
+    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="Release build for $KERNELNAME Kernel stopped unexpectedly ;_;" -d chat_id="-1001177930262"
+    #curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAADqwIAAp6cUgruBouCZGe0NQI"  -d chat_id="-1001177930262"
     success=false;
     exit 1;
 else
@@ -137,14 +137,15 @@ source common
 message="CI build of Jaguar Kernel completed with the latest commit."
 time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001192302740"
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
 curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
 
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADFQADIIRIEhVlVOIt6EkuAgc"  -d chat_id=$CHAT_ID
 # curl -F document=@$url caption="Latest Build." https://api.telegram.org/bot$BOT_API_KEY/sendDocument -d chat_id=$CHAT_ID
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
-🛠️ Make-Type  : ${M	AKE_TYPE}
+🛠️ Make-Type  : ${MAKE_TYPE}
+🗒️ Buld-Type  : RELEASE
 ⌚ Build-Time : $time
 🗒️ Zip-Name   : $ZIPNAME
 " -d chat_id=$CHAT_ID
