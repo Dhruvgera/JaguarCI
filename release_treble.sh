@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export TZ="Asia/Kolkata";
-
+export CHAT_ID="-1001177930262"
 # Kernel compiling script
 
 function check_toolchain() {
