@@ -121,7 +121,7 @@ function transfer() {
   url="$(curl -# -T $1 https://transfer.sh)";
   printf '\n';
   echo -e "\n\033[0;32m> Download ${zip_name} at ${url} \033[0;0m\n" ;
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$url" -d chat_id=$CHAT_ID
+    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$url" -d chat_id="-1001177930262."
 }
 
 cd $KERNEL_DIR
@@ -186,13 +186,13 @@ $(git log --pretty=format:'%h : %s' -5)"
 #$branch 
 #$time
 #$commit" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
-#curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADuQADLG6EE9HnR-_L0F2YAg"  -d chat_id=$CHAT_ID
+#curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADuQADLG6EE9HnR-_L0F2YAg"  -d chat_id="-1001177930262."
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
 🛠️ Make-Type  : ${MAKE_TYPE}
 ⌚ Build-Time : $time
 🗒️ Zip-Name   : $ZIPNAME
-" -d chat_id=$CHAT_ID
+" -d chat_id="-1001177930262"
 
 
 rm -rf ${ZIP_DIR}/${ZIP_NAME}
