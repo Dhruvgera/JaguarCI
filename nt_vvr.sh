@@ -53,7 +53,7 @@ export TOOLCHAIN="${HOME}/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/";
 export DEFCONFIG="santoni_defconfig";
 export ZIP_DIR="${KERNELDIR}/files/";
 export IMAGE="${OUTDIR}/arch/${ARCH}/boot/Image.gz-dtb";
-
+export RELEASE-BUILD="RELEASE-BUILD"
 if [[ -z "${JOBS}" ]]; then
     export JOBS="$(nproc --all)";
 #    export JOBS=64;
@@ -66,7 +66,7 @@ export TCVERSION1="$(${CROSS_COMPILE}gcc --version | head -1 |\
 awk -F '(' '{print $2}' | awk '{print tolower($1)}')"
 export TCVERSION2="$(${CROSS_COMPILE}gcc --version | head -1 |\
 awk -F ')' '{print $2}' | awk '{print tolower($1)}')"
-export ZIPNAME="${KERNELNAME}-${MAKE_TYPE}-RELEASE-BUILD-$(date +%Y%m%d-%H%M).zip"
+export ZIPNAME="${KERNELNAME}-${MAKE_TYPE}-${RELEASE-BUILD}-$(date +%Y%m%d-%H%M).zip"
 export FINAL_ZIP="${ZIP_DIR}/${ZIPNAME}"
 
 [ ! -d "${ZIP_DIR}" ] && mkdir -pv ${ZIP_DIR}
