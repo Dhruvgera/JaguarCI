@@ -23,7 +23,7 @@ function transfer() {
 	url="$(curl -# -T $1 https://transfer.sh)";
 	printf '\n';
 	echo -e "Download ${zipname} at ${url}";
-    curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$url" -d chat_id=$CHAT_ID
+    #curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$url" -d chat_id=$CHAT_ID
 }
 
 if [[ -z ${KERNELDIR} ]]; then
@@ -134,21 +134,24 @@ if [[ ${success} == true ]]; then
     echo -e "Uploading ${ZIPNAME} to https://transfer.sh/";
     transfer "${FINAL_ZIP}";
 source common
-message="CI build of Jaguar Kernel completed with the latest commit."
-time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
+commits=""$(git log --pretty=format:'%h : %s' -5)""
+time=" $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
+curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
+🛠️ Make-Type  : ${MAKE_TYPE}
+🗒️ Build-Type  : RELEASE
+⌚ Build-Time  : $time
+✅ Tool Chain  : $(${CROSS_COMPILE}gcc --version | head -1)
+🔰 Commits     : $commits
+🗒️ Zip-Link    : [$ZIPNAME](${url})
+ -d chat_id=$CHAT_ID "
 
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
-curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+# curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$MAKE_TYPE CI build with $(${CROSS_COMPILE}gcc --version | head -1) " https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+# curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
 
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID
 # curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADFQADIIRIEhVlVOIt6EkuAgc"  -d chat_id=$CHAT_ID
 # curl -F document=@$url caption="Latest Build." https://api.telegram.org/bot$BOT_API_KEY/sendDocument -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
-🛠️ Make-Type  : ${MAKE_TYPE}
-🗒️ Buld-Type  : RELEASE
-⌚ Build-Time : $time
-🗒️ Zip-Name   : $ZIPNAME
-" -d chat_id=$CHAT_ID
+
 
 
 
