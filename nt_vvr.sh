@@ -33,7 +33,7 @@ fi
 
 export DEVICE=$1;
 
-export MAKE_TYPE="Non-Treble"
+export MAKE_TYPE="NON-TREBLE"
 if [[ -z ${DEVICE} ]]; then
     export DEVICE="Santoni";
 fi
@@ -134,7 +134,7 @@ if [[ ${success} == true ]]; then
     echo -e "Uploading ${ZIPNAME} to https://transfer.sh/";
     transfer "${FINAL_ZIP}";
 source common
-message="CI build of Jaguar Kernel completed with the latest commit."
+message="Jaguar Kernel Build By @vvreddy completed."
 time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
