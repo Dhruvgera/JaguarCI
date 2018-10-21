@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export TZ="Asia/Kolkata";
-export CHAT_ID="-1001177930262"
+export CHAT_ID="@jagcomupd"
 # Kernel compiling script
 
 function check_toolchain() {
@@ -138,17 +138,18 @@ message="CI build of Jaguar Kernel completed with the latest commit."
 time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
-curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
-
-# curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID
-# curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADFQADIIRIEhVlVOIt6EkuAgc"  -d chat_id=$CHAT_ID
-# curl -F document=@$url caption="Latest Build." https://api.telegram.org/bot$BOT_API_KEY/sendDocument -d chat_id=$CHAT_ID
-curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
+curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time
 🛠️ Make-Type  : ${MAKE_TYPE}
 🗒️ Buld-Type  : RELEASE
 ⌚ Build-Time : $time
 🗒️ Zip-Name   : $ZIPNAME
-" -d chat_id=$CHAT_ID
+" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
+
+# curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text=""  -d chat_id=$CHAT_ID
+# curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBQADFQADIIRIEhVlVOIt6EkuAgc"  -d chat_id=$CHAT_ID
+# curl -F document=@$url caption="Latest Build." https://api.telegram.org/bot$BOT_API_KEY/sendDocument -d chat_id=$CHAT_ID
+#curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
+#" -d chat_id=$CHAT_ID
 
 
 
