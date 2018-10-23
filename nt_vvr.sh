@@ -51,6 +51,7 @@ export TOOLCHAIN="${HOME}/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/";
 export DEFCONFIG="santoni_defconfig";
 export ZIP_DIR="${KERNELDIR}/files/";
 export IMAGE="${OUTDIR}/arch/${ARCH}/boot/Image.gz-dtb";
+export MAKE_TYPE="NON_TREBLE"
 
 if [[ -z "${JOBS}" ]]; then
     export JOBS="$(nproc --all)";
@@ -140,8 +141,8 @@ curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
 🖋️ Author     : vvrRockStar 
-🛠️ Make-Type  : ${MAKE_TYPE}
-🗒️ Buld-Type  : RELEASE
+🛠️ Make-Type  : $MAKE_TYPE
+🗒️ Build-Type : RELEASE
 ⌚ Build-Time : $time
 🗒️ Zip-Name   : $ZIPNAME
 "  -d chat_id=$CHAT_ID
