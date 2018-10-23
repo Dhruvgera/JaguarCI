@@ -139,6 +139,7 @@ curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(
 curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
+🖋️ Author     : vvrRockStar 
 🛠️ Make-Type  : ${MAKE_TYPE}
 🗒️ Buld-Type  : RELEASE
 ⌚ Build-Time : $time
