@@ -138,7 +138,7 @@ message="Jaguar Kernel Build By @vvreddy completed."
 time="Build took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds."
 
 curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="$(git log --pretty=format:'%h : %s' -5)" -d chat_id="-1001177930262"
-curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time
+curl -F chat_id="-1001304675095" -F document=@"${ZIP_DIR}/$ZIPNAME" -F caption="$message $time 
 🛠️ Make-Type  : ${MAKE_TYPE}
 🗒️ Buld-Type  : RELEASE
 ⌚ Build-Time : $time
