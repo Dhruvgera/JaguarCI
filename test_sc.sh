@@ -111,7 +111,7 @@ if [[ ! -f "${IMAGE}" ]]; then
     echo -e "Build failed :P";
     curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="CI build for $KERNELNAME Kernel stopped unexpectedly ;_;" -d chat_id=$CHAT_ID
     curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendSticker -d sticker="CAADBAADqwIAAp6cUgruBouCZGe0NQI"  -d chat_id=$CHAT_ID
-    make -j# | tee build-log.txt
+    make -j$(nproc --all) | tee build-log.txt
    #How to trim your logcats:
 
 grep -iE 'crash|error|fail|fatal' build-log.txt &> error.txt
