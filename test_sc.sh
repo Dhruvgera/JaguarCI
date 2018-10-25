@@ -115,6 +115,7 @@ if [[ ! -f "${IMAGE}" ]]; then
    #How to trim your logcats:
 
 grep -iE 'crash|error|fail|fatal' build-log.txt &> error.txt
+url -F chat_id="-1001304675095" -F document=@"error.txt" -F caption="$message $time" https://api.telegram.org/bot$BOT_API_KEY/sendDocument
     success=false;
     exit 1;
 else
