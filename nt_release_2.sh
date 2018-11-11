@@ -142,7 +142,7 @@ curl -s -X POST https://api.telegram.org/bot$BOT_API_KEY/sendMessage -d text="
 ♔♔♔♔♔♔♔BUILD-DETAILS♔♔♔♔♔♔♔
 🖋️ Author     : vvrRockStar
 🛠️ Make-Type  : $MAKE_TYPE
-🗒️ Buld-Type  : FORTNIGHTLY(Stable)
+🗒️ Buld-Type  : WEEKLY(Stable)
 ⌚ Build-Time : $time
 🗒️ Zip-Name   : $ZIPNAME
 "  -d chat_id=$CHAT_ID
